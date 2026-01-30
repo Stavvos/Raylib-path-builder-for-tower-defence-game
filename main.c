@@ -33,7 +33,8 @@ int main(void)
           EndMode3D();
 
         //render 2D goes here
-        EndDrawing();
+        
+	EndDrawing();
     }
 
     CloseWindow();        // Close window and OpenGL context
