@@ -33,7 +33,6 @@ int main(void)
           EndMode3D();
 
         //render 2D goes here
-	
         EndDrawing();
     }
 
