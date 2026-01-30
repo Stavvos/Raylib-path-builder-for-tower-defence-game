@@ -1,5 +1,7 @@
 #include "raylib.h"
 #include "utils.h"
+#include "initialise.c"
+#include "render.c"
 
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
@@ -21,7 +23,11 @@ int main(void)
     camera.projection = CAMERA_PERSPECTIVE;             // Camera projection type
 
     SetTargetFPS(60);                  
-
+    
+    //initialise level points matrix
+    struct Point levelPoints[ROWS][COLS];
+    initLevelPoints(levelPoints); 
+    
     // Main game loop
     while (!WindowShouldClose())        // Detect window close button or ESC key
     {
@@ -33,8 +39,8 @@ int main(void)
         
 	//render 3D goes here
           BeginMode3D(camera);
-            DrawGrid(10, 1.0f);
-          EndMode3D();
+            renderLevel(levelPoints); 
+	  EndMode3D();
 
         //render 2D goes here
         
