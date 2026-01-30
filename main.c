@@ -1,5 +1,8 @@
 #include "raylib.h"
 
+#define RAYGUI_IMPLEMENTATION
+#include "raygui.h"
+
 int main(void)
 {
     // Initialization
@@ -34,6 +37,13 @@ int main(void)
 
         //render 2D goes here
         
+	//GUI
+        if (GuiButton((Rectangle){ 24, 24, 120, 30 }, "START POINT"));        
+        if (GuiButton((Rectangle){ 24, 48, 120, 30 }, "PATH POINT"));        
+        if (GuiButton((Rectangle){ 24, 72, 120, 30 }, "REMOVE POINT"));        
+        if (GuiButton((Rectangle){ 24, 96, 120, 30 }, "TEST PATH"));        
+        if (GuiButton((Rectangle){ 24, 120, 120, 30 }, "EXPORT PATH"));        
+	
 	EndDrawing();
     }
 
