@@ -13,10 +13,21 @@ typedef enum PointState
   NOPOINT
 } PointState;
 
+typedef enum CameraState
+{
+  FREEROAM,
+  FIXED
+} CameraState;
+
 struct Point
 {
   Vector3 pos;
   PointState pointState;
+};
+
+struct Cam
+{
+  CameraState cameraState;
 };
 
 #endif
