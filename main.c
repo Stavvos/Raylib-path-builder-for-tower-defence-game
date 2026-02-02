@@ -4,7 +4,7 @@
 #include "render.c"
 #include "GUI.c"
 #include "camera.c"
-#include "pathPicking.c"
+#include "path.c"
 
 int main(void)
 {
