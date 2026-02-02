@@ -4,6 +4,7 @@
 #include "render.c"
 #include "GUI.c"
 #include "camera.c"
+#include "pathPicking.c"
 
 int main(void)
 {
@@ -29,12 +30,16 @@ int main(void)
     
   struct Cam cam;
   cam.cameraState = FIXED;
+  
+  struct EditMode editMode;
+  editMode.editState = NULLSTATE;
 
     // Main game loop
     while (!WindowShouldClose())        // Detect window close button or ESC key
     {
       //Update
       switchCameraMode(&camera, &cam); 
+      pointStateAllocator(levelPoints, camera, &editMode);
 
       BeginDrawing();
         ClearBackground(RAYWHITE);
@@ -47,7 +52,7 @@ int main(void)
         //render 2D goes here
         
         //GUI
-        renderButtons();
+        renderButtons(&editMode);
 
       EndDrawing();
     }

@@ -19,6 +19,19 @@ typedef enum CameraState
   FIXED
 } CameraState;
 
+typedef enum EditState
+{
+  NULLSTATE, 
+  ADDSTARTPOINT,
+  ADDPATHPOINT,
+  REMOVEPATHPOINT
+} EditState;
+
+struct EditMode
+{
+  EditState editState;
+};
+
 struct Point
 {
   Vector3 pos;

@@ -7,7 +7,18 @@ void renderLevel(struct Point levelPoints[ROWS][COLS])
   {
     for (int j = 0; j < COLS; j++)
     {
-      DrawSphere(levelPoints[i][j].pos, 0.25, BLACK);  
+      if (levelPoints[i][j].pointState == PATHPOINT)
+      {	      
+        DrawSphere(levelPoints[i][j].pos, 0.25, BLUE);
+      }
+      else if (levelPoints[i][j].pointState == STARTPOINT)
+      {
+        DrawSphere(levelPoints[i][j].pos, 0.25, GREEN);
+      } 
+      else
+      {
+        DrawSphere(levelPoints[i][j].pos, 0.25, BLACK);
+      } 
     } 
   }
 }
