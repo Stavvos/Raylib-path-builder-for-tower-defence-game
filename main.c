@@ -46,7 +46,8 @@ int main(void)
         
         //render 3D goes here
         BeginMode3D(camera);
-          renderLevel(levelPoints); 
+          renderLevel(levelPoints);
+          iterateLevelPoints(levelPoints);
         EndMode3D();
 
         //render 2D goes here
