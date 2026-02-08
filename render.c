@@ -7,46 +7,39 @@ bool visited[ROWS][COLS];
 void dfs(int i, int j, struct Point points[ROWS][COLS])
 {
   //exit case
-  if(i < 0 || i >= ROWS || j < 0 || j >= COLS || points[i][j].pointState == NOPOINT || visited[i][j] == true)
+  if(i < 0 || i >= ROWS || j < 0 || j >= COLS || visited[i][j] == true)
   {
     return;
   }
 
   visited[i][j] = true;
 
-  //up
-  if (i - 1 >= 0 &&
-      points[i - 1][j].pointState != NOPOINT &&
-      visited[i - 1][j] == false)
-  {
-      DrawLine3D(points[i][j].pos, points[i - 1][j].pos, BLACK);
-      dfs(i - 1, j, points);
-  }
-
-  //down
-  if (i + 1 < ROWS &&
-      points[i + 1][j].pointState != NOPOINT &&
-      visited[i + 1][j] == false)
-  {
-      DrawLine3D(points[i][j].pos, points[i + 1][j].pos, BLACK);
-      dfs(i + 1, j, points);
-  }
- //left
-  if (j - 1 >= 0 &&
-      points[i][j - 1].pointState != NOPOINT &&
-      visited[i][j - 1] == false)
+  //left
+  if (j - 1 >= 0 && visited[i][j - 1] == false && points[i][j - 1].direction == LEFT)
   {
       DrawLine3D(points[i][j].pos, points[i][j - 1].pos, BLACK);
       dfs(i, j - 1, points);
   }
 
   //right 
-  if (j + 1 < COLS &&
-      points[i][j + 1].pointState != NOPOINT &&
-      visited[i][j + 1] == false)
+  if (j + 1 < COLS && visited[i][j + 1] == false && points[i][j + 1].direction == RIGHT)
   {
       DrawLine3D(points[i][j].pos, points[i][j + 1].pos, BLACK);
       dfs(i, j + 1, points);
+  }
+  
+  //up
+  if (i - 1 >= 0 && visited[i - 1][j] == false && points[i - 1][j].direction == UP)
+  {
+      DrawLine3D(points[i][j].pos, points[i - 1][j].pos, BLACK);
+      dfs(i - 1, j, points);
+  }
+
+  //down
+  if (i + 1 < ROWS && visited[i + 1][j] == false && points[i + 1][j].direction == DOWN)
+  {
+      DrawLine3D(points[i][j].pos, points[i + 1][j].pos, BLACK);
+      dfs(i + 1, j, points);
   }
 }
 
@@ -73,7 +66,7 @@ void renderLevel(struct Point levelPoints[ROWS][COLS])
   {
     for (int j = 0; j < COLS; j++)
     {
-      if (levelPoints[i][j].pointState == PATHPOINT)
+      if (levelPoints[i][j].direction != NODIRECTION)
       {	      
         DrawSphere(levelPoints[i][j].pos, 0.25, BLUE);
       }
@@ -88,5 +81,3 @@ void renderLevel(struct Point levelPoints[ROWS][COLS])
     } 
   }
 }
-
-

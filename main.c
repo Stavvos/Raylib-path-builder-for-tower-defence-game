@@ -16,9 +16,9 @@ int main(void)
 
   // Define the camera to look into our 3d world
   Camera3D camera = { 0 };
-  camera.position = (Vector3){ 50.0f, 50.0f, 50.0f }; // Camera position
+  camera.position = (Vector3){ 0.0f, 90.0f, 0.0f }; // Camera position
   camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };      // Camera looking at point
-  camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
+  camera.up = (Vector3){ 0.0f, 0.0f, -1.0f };          // Camera up vector (rotation towards target)
   camera.fovy = 45.0f;                                // Camera field-of-view Y
   camera.projection = CAMERA_PERSPECTIVE;             // Camera projection type
 
@@ -27,7 +27,7 @@ int main(void)
   //initialise level points matrix
   struct Point levelPoints[ROWS][COLS];
   initLevelPoints(levelPoints); 
-    
+
   struct Cam cam;
   cam.cameraState = FIXED;
   
@@ -40,7 +40,7 @@ int main(void)
       //Update
       switchCameraMode(&camera, &cam); 
       pointStateAllocator(levelPoints, camera, &editMode);
-
+      
       BeginDrawing();
         ClearBackground(RAYWHITE);
         

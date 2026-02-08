@@ -9,7 +9,6 @@
 typedef enum PointState
 {
   STARTPOINT,
-  PATHPOINT,
   NOPOINT
 } PointState;
 
@@ -23,9 +22,21 @@ typedef enum EditState
 {
   NULLSTATE, 
   ADDSTARTPOINT,
-  ADDPATHPOINT,
-  REMOVEPATHPOINT
+  REMOVEPATHPOINT,
+  ADDUPDIRECTION,
+  ADDDOWNDIRECTION,
+  ADDLEFTDIRECTION,
+  ADDRIGHTDIRECTION
 } EditState;
+
+typedef enum Direction
+{
+  UP,
+  DOWN,
+  LEFT,
+  RIGHT,
+  NODIRECTION
+} Direction;
 
 struct EditMode
 {
@@ -36,6 +47,7 @@ struct Point
 {
   Vector3 pos;
   PointState pointState;
+  Direction direction;
 };
 
 struct Cam

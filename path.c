@@ -10,17 +10,31 @@ void pointStateAllocator(struct Point points[ROWS][COLS], Camera3D camera, struc
       for (int j = 0; j < COLS; j++)
       {
         RayCollision collision = GetRayCollisionSphere(ray, points[i][j].pos, 0.25);
-        if (collision.hit && editMode->editState == ADDPATHPOINT)
-        {
-          points[i][j].pointState = PATHPOINT;
-        }
-        else if (collision.hit && editMode->editState == ADDSTARTPOINT)
+        
+	if (collision.hit && editMode->editState == ADDSTARTPOINT)
         {
           points[i][j].pointState = STARTPOINT;
         }
         else if (collision.hit && editMode->editState == REMOVEPATHPOINT)
         {
           points[i][j].pointState = NOPOINT;
+	  points[i][j].direction = NODIRECTION;
+        }
+        else if (collision.hit && editMode->editState == ADDUPDIRECTION)
+        {
+          points[i][j].direction = UP;
+        }
+	else if (collision.hit && editMode->editState == ADDDOWNDIRECTION)
+        {
+          points[i][j].direction = DOWN;
+        }
+	else if (collision.hit && editMode->editState == ADDLEFTDIRECTION)
+        {
+          points[i][j].direction = LEFT;
+        }
+	else if (collision.hit && editMode->editState == ADDRIGHTDIRECTION)
+        {
+          points[i][j].direction = RIGHT;
         }
       }
     }

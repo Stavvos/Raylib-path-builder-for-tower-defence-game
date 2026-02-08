@@ -12,6 +12,7 @@ void initLevelPoints(struct Point levelPoints[ROWS][COLS])
     {
       levelPoints[i][j].pos = (Vector3){X, 0.0, Y};
       levelPoints[i][j].pointState = NOPOINT;
+      levelPoints[i][j].direction = NODIRECTION;
       X += spacing;
     }
     X = -30.0f;
