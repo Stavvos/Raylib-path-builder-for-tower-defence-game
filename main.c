@@ -7,6 +7,15 @@
 #include "path.c"
 #include "raymath.h"
 
+Vector3 midpoint(Vector3 a, Vector3 b)
+{
+    return (Vector3){
+        (a.x + b.x) * 0.5f,
+        (a.y + b.y) * 0.5f,
+        (a.z + b.z) * 0.5f
+    };
+}
+
 int main(void)
 {
   // Initialization
@@ -17,39 +26,54 @@ int main(void)
 
   // Define the camera to look into our 3d world
   Camera3D camera = { 0 };
-  camera.position = (Vector3){ 50.0f, 50.0f, 50.0f }; // Camera position
+  camera.position = (Vector3){ 0.0f, 90.0f, 0.0f }; // Camera position
   camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };      // Camera looking at point
-  camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
+  camera.up = (Vector3){ 0.0f, 0.0f, -1.0f };          // Camera up vector (rotation towards target)
   camera.fovy = 45.0f;                                // Camera field-of-view Y
   camera.projection = CAMERA_PERSPECTIVE;             // Camera projection type
 
   SetTargetFPS(60);                  
-  
-  //height map  
-  Image image = LoadImage("heightMap/heightMap.png");// Load heightmap image (RAM)
-  Texture2D texture = LoadTextureFromImage(image);// Convert image to texture (VRAM)
-  
-  //the levelPoints matrix: rows = 9, spacing = 6; therefore the mesh row and col is  9 * 6 = 54
-  Mesh levelMesh = GenMeshHeightmap(image, (Vector3){ 54, 1, 54 }); // Generate heightmap mesh (RAM and VRAM)
-  Model levelModel = LoadModelFromMesh(levelMesh);// Load model from generated mesh
-
-  levelModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture; // Set map diffuse texture
-  Vector3 levelModelPosition = { -30.0f, 0.0f, -30.0f };// Define model position
-
-  UnloadImage(image);// Unload heightmap image from RAM, already uploaded to VRAM 
-    
+   
   //initialise level points matrix
   struct Point levelPoints[ROWS][COLS];
-  Matrix transform = MatrixIdentity(); // Start with identity
-  transform = MatrixTranslate(levelModelPosition.x, levelModelPosition.y, levelModelPosition.z);
-  initLevelPoints(levelPoints, levelMesh, transform); 
- 
+  initLevelPoints(levelPoints); 
+  
   struct Cam cam;
   cam.cameraState = FIXED;
   
   struct EditMode editMode;
   editMode.editState = NULLSTATE;
- 
+  
+  //level
+  float levelWidth = (ROWS - 1.0f) * 6.0f; 
+  float levelHeight = (COLS - 1.0f) * 6.0f;
+  Vector3 levelCentre = (Vector3){-30.0f + levelWidth * 0.5f, 0.5f, -30.0f + levelHeight * 0.5f};
+  Mesh levelMesh = GenMeshCube(levelWidth, 1.0f, levelHeight);
+  Model levelModel = LoadModelFromMesh(levelMesh);
+  
+  //vertical path
+  float pathVerticalWidth = 3.0f;
+  float pathVerticalHeight = 6.0f;
+  Vector3 pathVerticalCentre = midpoint(levelPoints[0][0].pos, levelPoints[1][0].pos);
+  pathVerticalCentre.y = 0.6; 
+  Mesh pathVerticalMesh = GenMeshCube(pathVerticalWidth, 1.0f, pathVerticalHeight);
+  Model pathVerticalModel = LoadModelFromMesh(pathVerticalMesh);
+  
+  //horizontal path 
+  float pathHorizontalWidth = 6.0f;
+  float pathHorizontalHeight = 3.0f;
+  Vector3 pathHorizontalCentre = midpoint(levelPoints[1][0].pos, levelPoints[1][1].pos);
+  pathHorizontalCentre.y = 0.6; 
+  Mesh pathHorizontalMesh = GenMeshCube(pathHorizontalWidth, 1.0f, pathHorizontalHeight);
+  Model pathHorizontalModel = LoadModelFromMesh(pathHorizontalMesh);
+
+  float pathCornerWidth = 3.0f;
+  float pathCornerHeight = 3.0f;
+  Vector3 pathCornerCentre = levelPoints[1][0].pos;
+  pathCornerCentre.y = 0.6; 
+  Mesh pathCornerMesh = GenMeshCube(pathCornerWidth, 1.0f, pathCornerHeight);
+  Model pathCornerModel = LoadModelFromMesh(pathCornerMesh);
+
     // Main game loop
     while (!WindowShouldClose())        // Detect window close button or ESC key
     {
@@ -64,20 +88,38 @@ int main(void)
         BeginMode3D(camera);
           renderLevel(levelPoints);
 	  iterateLevelPoints(levelPoints);
-          DrawModel(levelModel, levelModelPosition, 1.0f, GREEN);
-
+          DrawModelEx(levelModel, levelCentre, (Vector3){ 0, 1, 0 }, 0.0f, (Vector3){ 1.0f, 1.0f, 1.0f }, GREEN);
+          DrawModelEx(pathVerticalModel, 
+		      pathVerticalCentre, 
+		      (Vector3){ 0, 1, 0 }, 0.0f, 
+		      (Vector3){ 1.0f, 1.0f, 1.0f }, 
+		      BROWN);
+          DrawModelEx(pathHorizontalModel, 
+		      pathHorizontalCentre, 
+		      (Vector3){ 0, 1, 0 }, 
+		      0.0f, 
+		      (Vector3){ 1.0f, 1.0f, 1.0f }, 
+		      BROWN);
+          DrawModelEx(pathCornerModel, 
+		      pathCornerCentre, 
+		      (Vector3){ 0, 1, 0 }, 
+		      0.0f, 
+		      (Vector3){ 1.0f, 1.0f, 1.0f }, 
+		      BROWN);
         EndMode3D();
 
         //render 2D goes here
-        //GUI
+	//GUI
         renderButtons(&editMode);
 
       EndDrawing();
     }
   
   //de-initialise
-  UnloadTexture(texture);     // Unload texture
   UnloadModel(levelModel);
+  UnloadModel(pathVerticalModel);
+  UnloadModel(pathHorizontalModel);
+  UnloadModel(pathCornerModel);
   //Close window and OpenGL context
   CloseWindow();
 

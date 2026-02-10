@@ -72,7 +72,7 @@ void renderLevel(struct Point levelPoints[ROWS][COLS])
       }
       else if (levelPoints[i][j].pointState == STARTPOINT)
       {
-        DrawSphere(levelPoints[i][j].pos, 0.25, GREEN);
+        DrawSphere(levelPoints[i][j].pos, 0.25, RED);
       } 
       else
       {

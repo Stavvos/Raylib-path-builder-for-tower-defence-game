@@ -3,8 +3,8 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#define ROWS 10
-#define COLS 10
+#define ROWS 10 
+#define COLS 10 
 
 typedef enum PointState
 {
