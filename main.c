@@ -52,28 +52,32 @@ int main(void)
   Model levelModel = LoadModelFromMesh(levelMesh);
   
   //vertical path
-  float pathVerticalWidth = 3.0f;
-  float pathVerticalHeight = 6.0f;
-  Vector3 pathVerticalCentre = midpoint(levelPoints[0][0].pos, levelPoints[1][0].pos);
-  pathVerticalCentre.y = 0.6; 
-  Mesh pathVerticalMesh = GenMeshCube(pathVerticalWidth, 1.0f, pathVerticalHeight);
-  Model pathVerticalModel = LoadModelFromMesh(pathVerticalMesh);
+  struct VerticalPath verticalPath;
+  verticalPath.width = 3.0f;
+  verticalPath.height = 6.0f;
+  verticalPath.centre = midpoint(levelPoints[0][0].pos, levelPoints[1][0].pos);
+  verticalPath.centre.y = 0.6f;
+  verticalPath.mesh = GenMeshCube(verticalPath.width, 1.0f, verticalPath.height);
+  verticalPath.model = LoadModelFromMesh(verticalPath.mesh);
   
   //horizontal path 
-  float pathHorizontalWidth = 6.0f;
-  float pathHorizontalHeight = 3.0f;
-  Vector3 pathHorizontalCentre = midpoint(levelPoints[1][0].pos, levelPoints[1][1].pos);
-  pathHorizontalCentre.y = 0.6; 
-  Mesh pathHorizontalMesh = GenMeshCube(pathHorizontalWidth, 1.0f, pathHorizontalHeight);
-  Model pathHorizontalModel = LoadModelFromMesh(pathHorizontalMesh);
-
-  float pathCornerWidth = 3.0f;
-  float pathCornerHeight = 3.0f;
-  Vector3 pathCornerCentre = levelPoints[1][0].pos;
-  pathCornerCentre.y = 0.6; 
-  Mesh pathCornerMesh = GenMeshCube(pathCornerWidth, 1.0f, pathCornerHeight);
-  Model pathCornerModel = LoadModelFromMesh(pathCornerMesh);
-
+  struct HorizontalPath horizontalPath;
+  horizontalPath.width = 6.0f;
+  horizontalPath.height = 3.0f;
+  horizontalPath.centre = midpoint(levelPoints[1][0].pos, levelPoints[1][1].pos);
+  horizontalPath.centre.y = 0.6f;
+  horizontalPath.mesh = GenMeshCube(horizontalPath.width, 1.0f, horizontalPath.height);
+  horizontalPath.model = LoadModelFromMesh(horizontalPath.mesh);
+  
+  //corner path
+  struct CornerPath cornerPath;
+  cornerPath.width = 3.0f;
+  cornerPath.height = 3.0f;
+  cornerPath.centre = levelPoints[1][0].pos;
+  cornerPath.centre.y = 0.6f;
+  cornerPath.mesh = GenMeshCube(cornerPath.width, 1.0f, cornerPath.height);
+  cornerPath.model = LoadModelFromMesh(cornerPath.mesh);
+  
     // Main game loop
     while (!WindowShouldClose())        // Detect window close button or ESC key
     {
@@ -89,19 +93,19 @@ int main(void)
           renderLevel(levelPoints);
 	  iterateLevelPoints(levelPoints);
           DrawModelEx(levelModel, levelCentre, (Vector3){ 0, 1, 0 }, 0.0f, (Vector3){ 1.0f, 1.0f, 1.0f }, GREEN);
-          DrawModelEx(pathVerticalModel, 
-		      pathVerticalCentre, 
+          DrawModelEx(verticalPath.model, 
+		      verticalPath.centre, 
 		      (Vector3){ 0, 1, 0 }, 0.0f, 
 		      (Vector3){ 1.0f, 1.0f, 1.0f }, 
 		      BROWN);
-          DrawModelEx(pathHorizontalModel, 
-		      pathHorizontalCentre, 
+          DrawModelEx(horizontalPath.model, 
+		      horizontalPath.centre, 
 		      (Vector3){ 0, 1, 0 }, 
 		      0.0f, 
 		      (Vector3){ 1.0f, 1.0f, 1.0f }, 
 		      BROWN);
-          DrawModelEx(pathCornerModel, 
-		      pathCornerCentre, 
+          DrawModelEx(cornerPath.model, 
+		      cornerPath.centre, 
 		      (Vector3){ 0, 1, 0 }, 
 		      0.0f, 
 		      (Vector3){ 1.0f, 1.0f, 1.0f }, 
@@ -117,9 +121,9 @@ int main(void)
   
   //de-initialise
   UnloadModel(levelModel);
-  UnloadModel(pathVerticalModel);
-  UnloadModel(pathHorizontalModel);
-  UnloadModel(pathCornerModel);
+  UnloadModel(verticalPath.model);
+  UnloadModel(horizontalPath.model);
+  UnloadModel(cornerPath.model);
   //Close window and OpenGL context
   CloseWindow();
 
