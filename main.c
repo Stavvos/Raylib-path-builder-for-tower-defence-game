@@ -16,6 +16,69 @@ Vector3 midpoint(Vector3 a, Vector3 b)
     };
 }
 
+bool visitedPoints[ROWS][COLS];
+int counter = 0;
+
+void searchLevelPoints(int i, int j, struct Point points[ROWS][COLS], struct VerticalPath verticalPaths[])
+{
+  //exit case
+  if(i < 0 || i >= ROWS || j < 0 || j >= COLS || visitedPoints[i][j] == true)
+  {
+    return;
+  }
+
+  visitedPoints[i][j] = true;
+
+  //left
+  if (j - 1 >= 0 && visitedPoints[i][j - 1] == false && points[i][j - 1].direction == LEFT)
+  {
+    searchLevelPoints(i, j - 1, points, verticalPaths);
+  }
+
+  //right 
+  if (j + 1 < COLS && visitedPoints[i][j + 1] == false && points[i][j + 1].direction == RIGHT)
+  {
+    searchLevelPoints(i, j + 1, points, verticalPaths);
+  }
+  
+  //up
+  if (i - 1 >= 0 && visitedPoints[i - 1][j] == false && points[i - 1][j].direction == UP)
+  {
+    verticalPaths[counter].centre = midpoint(points[i][j].pos, points[i - 1][j].pos);
+    verticalPaths[counter].draw = true;
+    counter++;
+    searchLevelPoints(i - 1, j, points, verticalPaths);
+  }
+
+  //down
+  if (i + 1 < ROWS && visitedPoints[i + 1][j] == false && points[i + 1][j].direction == DOWN)
+  {
+    verticalPaths[counter].centre = midpoint(points[i][j].pos, points[i + 1][j].pos);
+    verticalPaths[counter].draw = true;
+    counter++;
+    searchLevelPoints(i + 1, j, points, verticalPaths);
+  }
+}
+
+void findStartPoints(struct Point points[ROWS][COLS], struct VerticalPath verticalPaths[])
+{
+  //reset the bool array. This way uses less instruction calls when compared to the nested for loop method
+  memset(visitedPoints, false, sizeof(visitedPoints));
+
+  for (int i = 0; i < ROWS; i++)
+  {
+    for (int j = 0; j < COLS; j++)
+    {
+      if(points[i][j].pointState == STARTPOINT)
+      {
+        searchLevelPoints(i, j, points, verticalPaths);
+      }
+    }
+  }
+
+  counter = 0;
+}
+
 int main(void)
 {
   // Initialization
@@ -60,6 +123,18 @@ int main(void)
   verticalPath.mesh = GenMeshCube(verticalPath.width, 1.0f, verticalPath.height);
   verticalPath.model = LoadModelFromMesh(verticalPath.mesh);
   
+  //vertical paths 
+  struct VerticalPath verticalPaths[ROWS*COLS];
+  for (int i = 0; i < ROWS*COLS; i++)
+  { 
+    verticalPaths[i].width = 3.0f;
+    verticalPaths[i].height = 6.0f;
+    verticalPaths[i].centre.y = 0.6f;
+    verticalPaths[i].mesh = GenMeshCube(verticalPath.width, 1.0f, verticalPath.height);
+    verticalPaths[i].model = LoadModelFromMesh(verticalPath.mesh);
+    verticalPaths[i].draw = false;
+  } 
+
   //horizontal path 
   struct HorizontalPath horizontalPath;
   horizontalPath.width = 6.0f;
@@ -85,6 +160,8 @@ int main(void)
       switchCameraMode(&camera, &cam); 
       pointStateAllocator(levelPoints, camera, &editMode);
       
+      findStartPoints(levelPoints, verticalPaths);
+       
       BeginDrawing();
         ClearBackground(RAYWHITE);
         
@@ -93,7 +170,21 @@ int main(void)
           renderLevel(levelPoints);
 	  iterateLevelPoints(levelPoints);
           DrawModelEx(levelModel, levelCentre, (Vector3){ 0, 1, 0 }, 0.0f, (Vector3){ 1.0f, 1.0f, 1.0f }, GREEN);
-          DrawModelEx(verticalPath.model, 
+          
+	  for (int i = 0; i < ROWS*COLS; i++)
+	  {
+            if (verticalPaths[i].draw == true)
+	    {
+	      DrawModelEx(verticalPaths[i].model, 
+	       	          verticalPaths[i].centre, 
+		          (Vector3){ 0, 1, 0 }, 
+			  0.0f, 
+		          (Vector3){ 1.0f, 1.0f, 1.0f }, 
+		          BROWN);
+	    }
+	  }
+
+/*          DrawModelEx(verticalPath.model, 
 		      verticalPath.centre, 
 		      (Vector3){ 0, 1, 0 }, 0.0f, 
 		      (Vector3){ 1.0f, 1.0f, 1.0f }, 
@@ -109,7 +200,7 @@ int main(void)
 		      (Vector3){ 0, 1, 0 }, 
 		      0.0f, 
 		      (Vector3){ 1.0f, 1.0f, 1.0f }, 
-		      BROWN);
+		      BROWN);*/
         EndMode3D();
 
         //render 2D goes here
@@ -126,7 +217,6 @@ int main(void)
   UnloadModel(cornerPath.model);
   //Close window and OpenGL context
   CloseWindow();
-
 
   return 0;
 }

@@ -1,6 +1,7 @@
 #include "utils.h"
 #include "raylib.h"
 #include "string.h"
+#include <stdio.h>
 
 bool visited[ROWS][COLS];
 

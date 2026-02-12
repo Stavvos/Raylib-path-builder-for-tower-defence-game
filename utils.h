@@ -22,6 +22,7 @@ struct VerticalPath
   Vector3 centre;
   Mesh mesh;
   Model model;
+  bool draw;
 };
 
 struct CornerPath
