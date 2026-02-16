@@ -63,11 +63,16 @@ int main(void)
   struct Path cornerPath;
   cornerPath.width = 3.0f;
   cornerPath.height = 3.0f;
-//  cornerPath.centre = levelPoints[1][0].pos;
   cornerPath.centre.y = 0.6f;
   cornerPath.mesh = GenMeshCube(cornerPath.width, 1.0f, cornerPath.height);
   cornerPath.model = LoadModelFromMesh(cornerPath.mesh);
   
+  struct Path cornerPieces[ROWS*COLS];
+  for(int i = 0; i < ROWS*COLS; i++)
+  {
+    cornerPieces[i] = cornerPath;
+  }
+   
   struct Path pathPieces[ROWS*COLS];
   for (int i = 0; i < ROWS*COLS; i++)
   {
@@ -80,8 +85,8 @@ int main(void)
       //Update
       switchCameraMode(&camera, &cam); 
       pointStateAllocator(levelPoints, camera, &editMode);
-      findStartPoints(levelPoints, pathPieces, horizontalPath, verticalPath);
-       
+      findStartPoints(levelPoints, pathPieces, horizontalPath, verticalPath, cornerPieces);
+            
       BeginDrawing();
         ClearBackground(RAYWHITE);
         
@@ -89,7 +94,21 @@ int main(void)
         BeginMode3D(camera);
           renderLevel(level);
 	  renderPositionPoints(levelPoints);
-          renderPath(pathPieces);	  
+          renderPath(pathPieces);
+
+	  for (int i = 0; i < ROWS*COLS; i++)
+	  {
+	    if(cornerPieces[i].draw == true)
+	    {
+	      DrawModelEx(cornerPieces[i].model,
+      	      cornerPieces[i].centre,
+              (Vector3){ 0, 1, 0 },
+              0.0f,
+              (Vector3){ 1.0f, 1.0f, 1.0f },
+              BROWN);
+	    }
+	  }
+
         EndMode3D();
 
         //render 2D goes here

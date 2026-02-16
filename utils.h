@@ -15,6 +15,14 @@ struct Level
   Model model;
 };
 
+typedef enum PathType
+{
+  UPPATH,
+  DOWNPATH,
+  LEFTPATH,
+  RIGHTPATH
+} PathType;
+
 struct Path
 {
   float width;
@@ -22,6 +30,7 @@ struct Path
   Vector3 centre;
   Mesh mesh;
   Model model;
+  PathType pathType;
   bool draw;
 };
 
