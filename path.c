@@ -12,6 +12,47 @@ Vector3 midpoint(Vector3 a, Vector3 b)
     };
 }
 
+void leftPathInit(struct Path* pathPiece, struct Path horizontalPath, struct Point points[ROWS][COLS], int i, int j)
+{
+  pathPiece->width = 6.0f;
+  pathPiece->height = 3.0f;
+  pathPiece->centre = midpoint(points[i][j].pos, points[i][j - 1].pos);
+  pathPiece->centre.y = 0.6f;
+  pathPiece->model = horizontalPath.model;
+  pathPiece->draw = true;
+}
+
+void rightPathInit(struct Path* pathPiece, struct Path horizontalPath, struct Point points[ROWS][COLS], int i, int j)
+{
+  pathPiece->width = 6.0f;
+  pathPiece->height = 3.0f;
+  pathPiece->centre = midpoint(points[i][j].pos, points[i][j + 1].pos);
+  pathPiece->centre.y = 0.6f;
+  pathPiece->model = horizontalPath.model;
+  pathPiece->draw = true;
+}
+
+
+void downPathInit(struct Path* pathPiece, struct Path verticalPath, struct Point points[ROWS][COLS], int i, int j)
+{
+  pathPiece->width = 3.0f;
+  pathPiece->height = 6.0f;
+  pathPiece->centre = midpoint(points[i][j].pos, points[i + 1][j].pos);
+  pathPiece->centre.y = 0.6f;
+  pathPiece->model = verticalPath.model;
+  pathPiece->draw = true;
+}
+
+void upPathInit(struct Path* pathPiece, struct Path verticalPath, struct Point points[ROWS][COLS], int i, int j)
+{
+  pathPiece->width = 3.0f;
+  pathPiece->height = 6.0f;
+  pathPiece->centre = midpoint(points[i][j].pos, points[i - 1][j].pos);
+  pathPiece->centre.y = 0.6f;
+  pathPiece->model = verticalPath.model;
+  pathPiece->draw = true;
+}
+
 void searchLevelPoints(int i, int j, struct Point points[ROWS][COLS], struct Path pathPieces[], struct Path horizontalPath, struct Path verticalPath)
 {
   //exit case
@@ -25,12 +66,7 @@ void searchLevelPoints(int i, int j, struct Point points[ROWS][COLS], struct Pat
   //left
   if (j - 1 >= 0 && visitedPoints[i][j - 1] == false && points[i][j - 1].direction == LEFT)
   {
-    pathPieces[pathIndex].width = 6.0f;
-    pathPieces[pathIndex].height = 3.0f;
-    pathPieces[pathIndex].centre = midpoint(points[i][j].pos, points[i][j - 1].pos);
-    pathPieces[pathIndex].centre.y = 0.6f;
-    pathPieces[pathIndex].model = horizontalPath.model;
-    pathPieces[pathIndex].draw = true;
+    leftPathInit(&pathPieces[pathIndex], horizontalPath, points, i, j); 
     pathIndex++;
     searchLevelPoints(i, j - 1, points, pathPieces, horizontalPath, verticalPath);
   }
@@ -38,12 +74,7 @@ void searchLevelPoints(int i, int j, struct Point points[ROWS][COLS], struct Pat
   //right 
   if (j + 1 < COLS && visitedPoints[i][j + 1] == false && points[i][j + 1].direction == RIGHT)
   {
-    pathPieces[pathIndex].width = 6.0f;
-    pathPieces[pathIndex].height = 3.0f;
-    pathPieces[pathIndex].centre = midpoint(points[i][j].pos, points[i][j + 1].pos);
-    pathPieces[pathIndex].centre.y = 0.6f;
-    pathPieces[pathIndex].model = horizontalPath.model;
-    pathPieces[pathIndex].draw = true;
+    rightPathInit(&pathPieces[pathIndex], horizontalPath, points, i, j); 
     pathIndex++;
     searchLevelPoints(i, j + 1, points, pathPieces, horizontalPath, verticalPath);
   }
@@ -51,13 +82,7 @@ void searchLevelPoints(int i, int j, struct Point points[ROWS][COLS], struct Pat
   //up
   if (i - 1 >= 0 && visitedPoints[i - 1][j] == false && points[i - 1][j].direction == UP)
   {
-
-    pathPieces[pathIndex].width = 3.0f;
-    pathPieces[pathIndex].height = 6.0f;
-    pathPieces[pathIndex].centre = midpoint(points[i][j].pos, points[i - 1][j].pos);
-    pathPieces[pathIndex].centre.y = 0.6f;
-    pathPieces[pathIndex].model = verticalPath.model;
-    pathPieces[pathIndex].draw = true;
+    upPathInit(&pathPieces[pathIndex], verticalPath, points, i, j);
     pathIndex++;
     searchLevelPoints(i - 1, j, points, pathPieces, horizontalPath, verticalPath);
   }
@@ -65,13 +90,7 @@ void searchLevelPoints(int i, int j, struct Point points[ROWS][COLS], struct Pat
   //down
   if (i + 1 < ROWS && visitedPoints[i + 1][j] == false && points[i + 1][j].direction == DOWN)
   {
-
-    pathPieces[pathIndex].width = 3.0f;
-    pathPieces[pathIndex].height = 6.0f;
-    pathPieces[pathIndex].centre = midpoint(points[i][j].pos, points[i + 1][j].pos);
-    pathPieces[pathIndex].centre.y = 0.6f;
-    pathPieces[pathIndex].model = verticalPath.model;
-    pathPieces[pathIndex].draw = true;
+    downPathInit(&pathPieces[pathIndex], verticalPath, points, i, j);
     pathIndex++;
     searchLevelPoints(i + 1, j, points, pathPieces, horizontalPath, verticalPath);
   }

@@ -63,7 +63,7 @@ int main(void)
   struct Path cornerPath;
   cornerPath.width = 3.0f;
   cornerPath.height = 3.0f;
-  cornerPath.centre = levelPoints[1][0].pos;
+//  cornerPath.centre = levelPoints[1][0].pos;
   cornerPath.centre.y = 0.6f;
   cornerPath.mesh = GenMeshCube(cornerPath.width, 1.0f, cornerPath.height);
   cornerPath.model = LoadModelFromMesh(cornerPath.mesh);
