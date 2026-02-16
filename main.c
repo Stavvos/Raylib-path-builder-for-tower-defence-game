@@ -94,21 +94,7 @@ int main(void)
         BeginMode3D(camera);
           renderLevel(level);
 	  renderPositionPoints(levelPoints);
-          renderPath(pathPieces);
-
-	  for (int i = 0; i < ROWS*COLS; i++)
-	  {
-	    if(cornerPieces[i].draw == true)
-	    {
-	      DrawModelEx(cornerPieces[i].model,
-      	      cornerPieces[i].centre,
-              (Vector3){ 0, 1, 0 },
-              0.0f,
-              (Vector3){ 1.0f, 1.0f, 1.0f },
-              BROWN);
-	    }
-	  }
-
+          renderPath(pathPieces, cornerPieces);
         EndMode3D();
 
         //render 2D goes here

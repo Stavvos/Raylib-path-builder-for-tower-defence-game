@@ -6,7 +6,7 @@ void renderLevel(struct Level level)
   DrawModelEx(level.model, level.centre, (Vector3){ 0, 1, 0 }, 0.0f, (Vector3){ 1.0f, 1.0f, 1.0f }, GREEN);
 }
 
-void renderPath(struct Path pathPieces[])
+void renderPath(struct Path pathPieces[], struct Path cornerPieces[])
 {
  for (int i = 0; i < ROWS*COLS; i++)
  {
@@ -18,6 +18,19 @@ void renderPath(struct Path pathPieces[])
       0.0f,
       (Vector3){ 1.0f, 1.0f, 1.0f },
       BROWN);
+    }
+  }
+
+  for (int i = 0; i < ROWS*COLS; i++)
+  {
+    if(cornerPieces[i].draw == true)
+    {
+       DrawModelEx(cornerPieces[i].model,
+       cornerPieces[i].centre,
+       (Vector3){ 0, 1, 0 },
+       0.0f,
+       (Vector3){ 1.0f, 1.0f, 1.0f },
+       BROWN);
     }
   }
 }

@@ -14,44 +14,32 @@ Vector3 midpoint(Vector3 a, Vector3 b)
 
 void leftPathInit(struct Path* pathPiece, struct Path horizontalPath, struct Point points[ROWS][COLS], int i, int j)
 {
-  pathPiece->width = 6.0f;
-  pathPiece->height = 3.0f;
+  *pathPiece = horizontalPath;
   pathPiece->centre = midpoint(points[i][j].pos, points[i][j - 1].pos);
-  pathPiece->centre.y = 0.6f;
-  pathPiece->model = horizontalPath.model;
   pathPiece->pathType = LEFTPATH;
   pathPiece->draw = true;
 }
 
 void rightPathInit(struct Path* pathPiece, struct Path horizontalPath, struct Point points[ROWS][COLS], int i, int j)
 {
-  pathPiece->width = 6.0f;
-  pathPiece->height = 3.0f;
+  *pathPiece = horizontalPath;
   pathPiece->centre = midpoint(points[i][j].pos, points[i][j + 1].pos);
-  pathPiece->centre.y = 0.6f;
-  pathPiece->model = horizontalPath.model;
   pathPiece->pathType = RIGHTPATH;
   pathPiece->draw = true;
 }
 
 void downPathInit(struct Path* pathPiece, struct Path verticalPath, struct Point points[ROWS][COLS], int i, int j)
 {
-  pathPiece->width = 3.0f;
-  pathPiece->height = 6.0f;
+  *pathPiece = verticalPath;
   pathPiece->centre = midpoint(points[i][j].pos, points[i + 1][j].pos);
-  pathPiece->centre.y = 0.6f;
-  pathPiece->model = verticalPath.model;
   pathPiece->pathType = DOWNPATH;
   pathPiece->draw = true;
 }
 
 void upPathInit(struct Path* pathPiece, struct Path verticalPath, struct Point points[ROWS][COLS], int i, int j)
 {
-  pathPiece->width = 3.0f;
-  pathPiece->height = 6.0f;
+  *pathPiece = verticalPath;
   pathPiece->centre = midpoint(points[i][j].pos, points[i - 1][j].pos);
-  pathPiece->centre.y = 0.6f;
-  pathPiece->model = verticalPath.model;
   pathPiece->pathType = UPPATH;
   pathPiece->draw = true;
 }
