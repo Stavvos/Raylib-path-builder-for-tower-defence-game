@@ -17,9 +17,12 @@ Vector3 midpoint(Vector3 a, Vector3 b)
 }
 
 bool visitedPoints[ROWS][COLS];
-int counter = 0;
+int pathIndex = 0;
 
-void searchLevelPoints(int i, int j, struct Point points[ROWS][COLS], struct VerticalPath verticalPaths[])
+struct VerticalPath verticalPath;
+struct HorizontalPath horizontalPath;
+
+void searchLevelPoints(int i, int j, struct Point points[ROWS][COLS], struct Path pathPieces[])
 {
   //exit case
   if(i < 0 || i >= ROWS || j < 0 || j >= COLS || visitedPoints[i][j] == true)
@@ -32,35 +35,59 @@ void searchLevelPoints(int i, int j, struct Point points[ROWS][COLS], struct Ver
   //left
   if (j - 1 >= 0 && visitedPoints[i][j - 1] == false && points[i][j - 1].direction == LEFT)
   {
-    searchLevelPoints(i, j - 1, points, verticalPaths);
+    pathPieces[pathIndex].width = 6.0f;
+    pathPieces[pathIndex].height = 3.0f; 
+    pathPieces[pathIndex].centre = midpoint(points[i][j].pos, points[i][j - 1].pos);
+    pathPieces[pathIndex].centre.y = 0.6f;
+    pathPieces[pathIndex].model = horizontalPath.model;
+    pathPieces[pathIndex].draw = true;
+    pathIndex++;
+    searchLevelPoints(i, j - 1, points, pathPieces);
   }
 
   //right 
   if (j + 1 < COLS && visitedPoints[i][j + 1] == false && points[i][j + 1].direction == RIGHT)
   {
-    searchLevelPoints(i, j + 1, points, verticalPaths);
+    pathPieces[pathIndex].width = 6.0f;
+    pathPieces[pathIndex].height = 3.0f; 
+    pathPieces[pathIndex].centre = midpoint(points[i][j].pos, points[i][j + 1].pos);
+    pathPieces[pathIndex].centre.y = 0.6f;
+    pathPieces[pathIndex].model = horizontalPath.model;
+    pathPieces[pathIndex].draw = true;
+    pathIndex++;
+    searchLevelPoints(i, j + 1, points, pathPieces);
   }
   
   //up
   if (i - 1 >= 0 && visitedPoints[i - 1][j] == false && points[i - 1][j].direction == UP)
   {
-    verticalPaths[counter].centre = midpoint(points[i][j].pos, points[i - 1][j].pos);
-    verticalPaths[counter].draw = true;
-    counter++;
-    searchLevelPoints(i - 1, j, points, verticalPaths);
+    
+    pathPieces[pathIndex].width = 3.0f;
+    pathPieces[pathIndex].height = 6.0f; 
+    pathPieces[pathIndex].centre = midpoint(points[i][j].pos, points[i - 1][j].pos);
+    pathPieces[pathIndex].centre.y = 0.6f;
+    pathPieces[pathIndex].model = verticalPath.model;
+    pathPieces[pathIndex].draw = true;
+    pathIndex++;
+    searchLevelPoints(i - 1, j, points, pathPieces);
   }
 
   //down
   if (i + 1 < ROWS && visitedPoints[i + 1][j] == false && points[i + 1][j].direction == DOWN)
   {
-    verticalPaths[counter].centre = midpoint(points[i][j].pos, points[i + 1][j].pos);
-    verticalPaths[counter].draw = true;
-    counter++;
-    searchLevelPoints(i + 1, j, points, verticalPaths);
+    
+    pathPieces[pathIndex].width = 3.0f;
+    pathPieces[pathIndex].height = 6.0f; 
+    pathPieces[pathIndex].centre = midpoint(points[i][j].pos, points[i + 1][j].pos);
+    pathPieces[pathIndex].centre.y = 0.6f;
+    pathPieces[pathIndex].model = verticalPath.model;
+    pathPieces[pathIndex].draw = true;
+    pathIndex++;
+    searchLevelPoints(i + 1, j, points, pathPieces);
   }
 }
 
-void findStartPoints(struct Point points[ROWS][COLS], struct VerticalPath verticalPaths[])
+void findStartPoints(struct Point points[ROWS][COLS], struct Path pathPieces[])
 {
   //reset the bool array. This way uses less instruction calls when compared to the nested for loop method
   memset(visitedPoints, false, sizeof(visitedPoints));
@@ -71,12 +98,12 @@ void findStartPoints(struct Point points[ROWS][COLS], struct VerticalPath vertic
     {
       if(points[i][j].pointState == STARTPOINT)
       {
-        searchLevelPoints(i, j, points, verticalPaths);
+        searchLevelPoints(i, j, points, pathPieces);
       }
     }
   }
-
-  counter = 0;
+  
+  pathIndex = 0;
 }
 
 int main(void)
@@ -115,7 +142,6 @@ int main(void)
   Model levelModel = LoadModelFromMesh(levelMesh);
   
   //vertical path
-  struct VerticalPath verticalPath;
   verticalPath.width = 3.0f;
   verticalPath.height = 6.0f;
   verticalPath.centre = midpoint(levelPoints[0][0].pos, levelPoints[1][0].pos);
@@ -123,27 +149,14 @@ int main(void)
   verticalPath.mesh = GenMeshCube(verticalPath.width, 1.0f, verticalPath.height);
   verticalPath.model = LoadModelFromMesh(verticalPath.mesh);
   
-  //vertical paths 
-  struct VerticalPath verticalPaths[ROWS*COLS];
-  for (int i = 0; i < ROWS*COLS; i++)
-  { 
-    verticalPaths[i].width = 3.0f;
-    verticalPaths[i].height = 6.0f;
-    verticalPaths[i].centre.y = 0.6f;
-    verticalPaths[i].mesh = GenMeshCube(verticalPath.width, 1.0f, verticalPath.height);
-    verticalPaths[i].model = LoadModelFromMesh(verticalPath.mesh);
-    verticalPaths[i].draw = false;
-  } 
-
   //horizontal path 
-  struct HorizontalPath horizontalPath;
   horizontalPath.width = 6.0f;
   horizontalPath.height = 3.0f;
   horizontalPath.centre = midpoint(levelPoints[1][0].pos, levelPoints[1][1].pos);
   horizontalPath.centre.y = 0.6f;
   horizontalPath.mesh = GenMeshCube(horizontalPath.width, 1.0f, horizontalPath.height);
   horizontalPath.model = LoadModelFromMesh(horizontalPath.mesh);
-  
+
   //corner path
   struct CornerPath cornerPath;
   cornerPath.width = 3.0f;
@@ -153,14 +166,19 @@ int main(void)
   cornerPath.mesh = GenMeshCube(cornerPath.width, 1.0f, cornerPath.height);
   cornerPath.model = LoadModelFromMesh(cornerPath.mesh);
   
+  struct Path pathPieces[ROWS*COLS];
+  for (int i = 0; i < ROWS*COLS; i++)
+  {
+    pathPieces[i].draw = false;
+  }
+
     // Main game loop
     while (!WindowShouldClose())        // Detect window close button or ESC key
     {
       //Update
       switchCameraMode(&camera, &cam); 
       pointStateAllocator(levelPoints, camera, &editMode);
-      
-      findStartPoints(levelPoints, verticalPaths);
+      findStartPoints(levelPoints, pathPieces);
        
       BeginDrawing();
         ClearBackground(RAYWHITE);
@@ -168,15 +186,14 @@ int main(void)
         //render 3D goes here
         BeginMode3D(camera);
           renderLevel(levelPoints);
-	  iterateLevelPoints(levelPoints);
           DrawModelEx(levelModel, levelCentre, (Vector3){ 0, 1, 0 }, 0.0f, (Vector3){ 1.0f, 1.0f, 1.0f }, GREEN);
-          
-	  for (int i = 0; i < ROWS*COLS; i++)
+	  
+          for (int i = 0; i < ROWS*COLS; i++)
 	  {
-            if (verticalPaths[i].draw == true)
+            if (pathPieces[i].draw == true)
 	    {
-	      DrawModelEx(verticalPaths[i].model, 
-	       	          verticalPaths[i].centre, 
+	      DrawModelEx(pathPieces[i].model, 
+	       	          pathPieces[i].centre, 
 		          (Vector3){ 0, 1, 0 }, 
 			  0.0f, 
 		          (Vector3){ 1.0f, 1.0f, 1.0f }, 
@@ -184,23 +201,6 @@ int main(void)
 	    }
 	  }
 
-/*          DrawModelEx(verticalPath.model, 
-		      verticalPath.centre, 
-		      (Vector3){ 0, 1, 0 }, 0.0f, 
-		      (Vector3){ 1.0f, 1.0f, 1.0f }, 
-		      BROWN);
-          DrawModelEx(horizontalPath.model, 
-		      horizontalPath.centre, 
-		      (Vector3){ 0, 1, 0 }, 
-		      0.0f, 
-		      (Vector3){ 1.0f, 1.0f, 1.0f }, 
-		      BROWN);
-          DrawModelEx(cornerPath.model, 
-		      cornerPath.centre, 
-		      (Vector3){ 0, 1, 0 }, 
-		      0.0f, 
-		      (Vector3){ 1.0f, 1.0f, 1.0f }, 
-		      BROWN);*/
         EndMode3D();
 
         //render 2D goes here

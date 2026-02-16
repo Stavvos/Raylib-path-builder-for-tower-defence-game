@@ -6,6 +6,18 @@
 #define ROWS 10 
 #define COLS 10 
 
+
+struct Path
+{
+  float width;
+  float height;
+  Vector3 centre;
+  Mesh mesh;
+  Model model;
+  bool draw;
+};
+
+
 struct HorizontalPath
 {
   float width;
@@ -13,6 +25,7 @@ struct HorizontalPath
   Vector3 centre;
   Mesh mesh;
   Model model;
+  bool draw;
 };
 
 struct VerticalPath
@@ -32,6 +45,7 @@ struct CornerPath
   Vector3 centre;
   Mesh mesh;
   Model model;
+  bool draw;
 };
 
 typedef enum PointState
