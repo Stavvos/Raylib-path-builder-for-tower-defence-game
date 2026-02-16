@@ -1,7 +1,28 @@
 #include "utils.h"
 #include "raylib.h"
 
-void renderLevel(struct Point levelPoints[ROWS][COLS])
+void renderLevel(struct Level level)
+{
+  DrawModelEx(level.model, level.centre, (Vector3){ 0, 1, 0 }, 0.0f, (Vector3){ 1.0f, 1.0f, 1.0f }, GREEN);
+}
+
+void renderPath(struct Path pathPieces[])
+{
+ for (int i = 0; i < ROWS*COLS; i++)
+ {
+    if (pathPieces[i].draw == true)
+    {
+      DrawModelEx(pathPieces[i].model,
+      pathPieces[i].centre,
+      (Vector3){ 0, 1, 0 },
+      0.0f,
+      (Vector3){ 1.0f, 1.0f, 1.0f },
+      BROWN);
+    }
+  }
+}
+
+void renderPositionPoints(struct Point levelPoints[ROWS][COLS])
 {
   for (int i = 0; i < ROWS; i++)
   {

@@ -6,39 +6,16 @@
 #define ROWS 10 
 #define COLS 10 
 
+struct Level
+{
+  float width;
+  float height;
+  Vector3 centre;
+  Mesh mesh;
+  Model model;
+};
 
 struct Path
-{
-  float width;
-  float height;
-  Vector3 centre;
-  Mesh mesh;
-  Model model;
-  bool draw;
-};
-
-
-struct HorizontalPath
-{
-  float width;
-  float height;
-  Vector3 centre;
-  Mesh mesh;
-  Model model;
-  bool draw;
-};
-
-struct VerticalPath
-{
-  float width;
-  float height;
-  Vector3 centre;
-  Mesh mesh;
-  Model model;
-  bool draw;
-};
-
-struct CornerPath
 {
   float width;
   float height;
