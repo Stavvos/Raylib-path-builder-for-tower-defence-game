@@ -1,5 +1,25 @@
 #include "utils.h"
 
+void initCamera(Camera* camera, struct Cam* cam)
+{
+  camera->position = (Vector3){ 0.0f, 90.0f, 0.0f }; // Camera position
+  camera->target = (Vector3){ 0.0f, 0.0f, 0.0f };      // Camera looking at point
+  camera->up = (Vector3){ 0.0f, 0.0f, -1.0f };          // Camera up vector (rotation towards target)
+  camera->fovy = 45.0f;                                // Camera field-of-view Y
+  camera->projection = CAMERA_PERSPECTIVE;             // Camera projection type
+						       
+  cam->cameraState = FIXED;
+}
+
+void initLevel(struct Level* level)
+{
+  level->width = (ROWS - 1.0f) * 6.0f;
+  level->height = (COLS - 1.0f) * 6.0f;
+  level->centre = (Vector3){-30.0f + level->width * 0.5f, 0.5f, -30.0f + level->height * 0.5f};
+  level->mesh = GenMeshCube(level->width, 1.0f, level->height);
+  level->model = LoadModelFromMesh(level->mesh);
+}
+
 void initLevelPoints(struct Point levelPoints[ROWS][COLS])
 {
   int spacing = 6;
