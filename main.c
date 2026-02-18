@@ -6,6 +6,7 @@
 #include "camera.c"
 #include "path.c"
 #include "raymath.h"
+#include "cJSON.h"
 
 int main(void)
 {
@@ -14,7 +15,6 @@ int main(void)
   int screenHeight = GetScreenHeight();
 
   InitWindow(screenWidth, screenHeight, "Level Editor");
-
   SetTargetFPS(60);
 
   // Define the camera to look into our 3d world
