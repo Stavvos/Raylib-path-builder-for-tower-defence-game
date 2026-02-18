@@ -19,3 +19,37 @@ void initLevelPoints(struct Point levelPoints[ROWS][COLS])
     Z += spacing;
   }
 }
+
+void initPathPieces(struct Path* verticalPath, struct Path* horizontalPath, struct Path* cornerPath, struct Path cornerPieces[], struct Path pathPieces[])
+{
+  //vertical path
+  verticalPath->width = 3.0f;
+  verticalPath->height = 6.0f;
+  verticalPath->centre.y = 0.6f;
+  verticalPath->mesh = GenMeshCube(verticalPath->width, 1.0f, verticalPath->height);
+  verticalPath->model = LoadModelFromMesh(verticalPath->mesh);
+
+  //horizontal path 
+  horizontalPath->width = 6.0f;
+  horizontalPath->height = 3.0f;
+  horizontalPath->centre.y = 0.6f;
+  horizontalPath->mesh = GenMeshCube(horizontalPath->width, 1.0f, horizontalPath->height);
+  horizontalPath->model = LoadModelFromMesh(horizontalPath->mesh);
+
+  //corner path
+  cornerPath->width = 3.0f;
+  cornerPath->height = 3.0f;
+  cornerPath->centre.y = 0.6f;
+  cornerPath->mesh = GenMeshCube(cornerPath->width, 1.0f, cornerPath->height);
+  cornerPath->model = LoadModelFromMesh(cornerPath->mesh);
+
+  for(int i = 0; i < ROWS*COLS; i++)
+  {
+    cornerPieces[i] = *cornerPath;
+  }
+
+  for (int i = 0; i < ROWS*COLS; i++)
+  {
+    pathPieces[i].draw = false;
+  }
+}

@@ -43,41 +43,14 @@ int main(void)
   level.mesh = GenMeshCube(level.width, 1.0f, level.height);
   level.model = LoadModelFromMesh(level.mesh);
   
-  //vertical path
-  struct Path verticalPath;
-  verticalPath.width = 3.0f;
-  verticalPath.height = 6.0f;
-  verticalPath.centre.y = 0.6f;
-  verticalPath.mesh = GenMeshCube(verticalPath.width, 1.0f, verticalPath.height);
-  verticalPath.model = LoadModelFromMesh(verticalPath.mesh);
-  
-  //horizontal path 
-  struct Path horizontalPath;
-  horizontalPath.width = 6.0f;
-  horizontalPath.height = 3.0f;
-  horizontalPath.centre.y = 0.6f;
-  horizontalPath.mesh = GenMeshCube(horizontalPath.width, 1.0f, horizontalPath.height);
-  horizontalPath.model = LoadModelFromMesh(horizontalPath.mesh);
-
-  //corner path
-  struct Path cornerPath;
-  cornerPath.width = 3.0f;
-  cornerPath.height = 3.0f;
-  cornerPath.centre.y = 0.6f;
-  cornerPath.mesh = GenMeshCube(cornerPath.width, 1.0f, cornerPath.height);
-  cornerPath.model = LoadModelFromMesh(cornerPath.mesh);
-  
-  struct Path cornerPieces[ROWS*COLS];
-  for(int i = 0; i < ROWS*COLS; i++)
-  {
-    cornerPieces[i] = cornerPath;
-  }
    
+  //initialise path pieces
+  struct Path verticalPath;
+  struct Path horizontalPath;
+  struct Path cornerPath;
+  struct Path cornerPieces[ROWS*COLS];
   struct Path pathPieces[ROWS*COLS];
-  for (int i = 0; i < ROWS*COLS; i++)
-  {
-    pathPieces[i].draw = false;
-  }
+  initPathPieces(&verticalPath, &horizontalPath, &cornerPath, cornerPieces, pathPieces);
 
     // Main game loop
     while (!WindowShouldClose())        // Detect window close button or ESC key
