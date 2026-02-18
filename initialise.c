@@ -71,5 +71,6 @@ void initPathPieces(struct Path* verticalPath, struct Path* horizontalPath, stru
   for (int i = 0; i < ROWS*COLS; i++)
   {
     pathPieces[i].draw = false;
+    pathPieces[i].pathType = NULLTYPE;
   }
 }

@@ -20,7 +20,8 @@ typedef enum PathType
   UPPATH,
   DOWNPATH,
   LEFTPATH,
-  RIGHTPATH
+  RIGHTPATH,
+  NULLTYPE
 } PathType;
 
 struct Path

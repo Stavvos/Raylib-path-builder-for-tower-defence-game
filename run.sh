@@ -2,7 +2,7 @@
 
 rm ./levelEditor
 
-if gcc -Wall -pedantic -o levelEditor main.c -lraylib -lGL -lm -lpthread -ldl -lrt -lX11; then
+if gcc -Wall -pedantic -o levelEditor main.c cJSON.c -lraylib -lGL -lm -lpthread -ldl -lrt -lX11; then
   echo compiled
 else
   exit $?
