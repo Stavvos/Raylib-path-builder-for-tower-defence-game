@@ -1,5 +1,5 @@
 #define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
+#include "dependencies/raygui.h"
 
 void renderButtons(struct EditMode* editMode)
 {
