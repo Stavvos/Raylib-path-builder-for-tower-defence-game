@@ -22,9 +22,8 @@ void initLevel(struct Level* level)
 
 void initLevelPoints(struct Point levelPoints[ROWS][COLS])
 {
-  int spacing = 6;
-  int X = -30.0f;
-  int Z = -30.0f;
+  int X = POSX;
+  int Z = POSZ;
 
   for (int i = 0; i < ROWS; i++)
   {
@@ -33,10 +32,10 @@ void initLevelPoints(struct Point levelPoints[ROWS][COLS])
       levelPoints[i][j].pos = (Vector3){X, 1.0f, Z};
       levelPoints[i][j].pointState = NOPOINT;
       levelPoints[i][j].direction = NODIRECTION;
-      X += spacing;
+      X += SPACING;
     }
-    X = -30.0f;
-    Z += spacing;
+    X = POSX;
+    Z += SPACING;
   }
 }
 

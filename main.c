@@ -78,6 +78,53 @@ void write_paths_to_json(struct Path* paths, const char* filename) {
   free(json_string);
 }
 
+// Function to serialize level struct to JSON
+cJSON* levelToJson(struct Level level) 
+{
+  cJSON* json = cJSON_CreateObject();
+
+  // Add primitive types to the JSON object
+  cJSON_AddNumberToObject(json, "width", level.width);
+  cJSON_AddNumberToObject(json, "height", level.height);
+  cJSON_AddItemToObject(json, "centre", vector3_to_json(level.centre));
+  cJSON_AddNumberToObject(json, "ROWS", ROWS);
+  cJSON_AddNumberToObject(json, "COLS", COLS);
+  cJSON_AddNumberToObject(json, "SPACING", SPACING);
+  cJSON_AddNumberToObject(json, "POSX", POSX);
+  cJSON_AddNumberToObject(json, "POSZ", POSZ);
+  
+  return json;
+}
+
+// Function to write level to JSON file 
+void writeLevelTojson(struct Level level, const char* filename) {
+  cJSON* jsonArray = cJSON_CreateArray();
+
+  // Iterate over the array and convert each Path to a JSON object
+  cJSON* levelJson = levelToJson(level);
+  cJSON_AddItemToArray(jsonArray, levelJson);
+
+  // Convert the JSON array to a string
+  char* jsonString = cJSON_Print(jsonArray);
+
+  // Write the JSON string to a file
+  FILE* file = fopen(filename, "w");
+  if (file) 
+  {
+     fprintf(file, "%s", jsonString);
+     fclose(file);
+     printf("Data written to %s\n", filename);
+  } 
+  else 
+  {
+     printf("Error opening file for writing\n");
+  }
+
+  // Clean up
+  cJSON_Delete(jsonArray);
+  free(jsonString);
+}
+
 int main(void)
 {
   // Initialization
@@ -121,9 +168,10 @@ int main(void)
       
       if (IsKeyPressed(KEY_P))
       {
-        write_paths_to_json(pathPieces, "paths.json");
+        write_paths_to_json(pathPieces, "JSON/paths.json");
+        writeLevelTojson(level, "JSON/level.json");
       }
-            
+
       BeginDrawing();
         ClearBackground(RAYWHITE);
         
@@ -133,7 +181,7 @@ int main(void)
 	  renderPositionPoints(levelPoints);
           renderPath(pathPieces, cornerPieces);
         EndMode3D();
-
+       
         //render 2D goes here
 	//GUI
         renderButtons(&editMode);

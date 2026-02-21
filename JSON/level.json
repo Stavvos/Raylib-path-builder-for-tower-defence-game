@@ -1,0 +1,14 @@
+[{
+		"width":	54,
+		"height":	54,
+		"centre":	{
+			"x":	-3,
+			"y":	0.5,
+			"z":	-3
+		},
+		"ROWS":	10,
+		"COLS":	10,
+		"SPACING":	6,
+		"POSX":	-30,
+		"POSZ":	-30
+	}]

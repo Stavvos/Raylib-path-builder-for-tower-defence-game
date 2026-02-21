@@ -5,6 +5,9 @@
 
 #define ROWS 10 
 #define COLS 10 
+#define SPACING 6 
+#define POSX -30.0f
+#define POSZ -30.0f
 
 struct Level
 {
