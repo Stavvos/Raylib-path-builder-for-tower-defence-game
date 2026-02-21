@@ -40,7 +40,8 @@ void renderButtons(struct EditMode* editMode)
   
   }
   
-  if (GuiButton((Rectangle){ 24, 248, 120, 30 }, "EXPORT PATH"))
+  if (GuiButton((Rectangle){ 24, 248, 120, 30 }, "EXPORT"))
   {
+    editMode->editState = EXPORT;	  
   }
 }

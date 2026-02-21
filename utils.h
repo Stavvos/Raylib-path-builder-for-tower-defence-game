@@ -58,7 +58,8 @@ typedef enum EditState
   ADDUPDIRECTION,
   ADDDOWNDIRECTION,
   ADDLEFTDIRECTION,
-  ADDRIGHTDIRECTION
+  ADDRIGHTDIRECTION,
+  EXPORT
 } EditState;
 
 typedef enum Direction

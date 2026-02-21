@@ -166,10 +166,11 @@ int main(void)
       pointStateAllocator(levelPoints, camera, &editMode);
       findStartPoints(levelPoints, pathPieces, horizontalPath, verticalPath, cornerPieces);
       
-      if (IsKeyPressed(KEY_P))
+      if (editMode.editState == EXPORT)
       {
         write_paths_to_json(pathPieces, "JSON/paths.json");
         writeLevelTojson(level, "JSON/level.json");
+	editMode.editState = NULLSTATE;
       }
 
       BeginDrawing();
