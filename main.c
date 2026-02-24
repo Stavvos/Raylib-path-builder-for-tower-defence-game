@@ -40,6 +40,7 @@ int main(void)
   struct Path cornerPieces[ROWS*COLS];
   struct Path pathPieces[ROWS*COLS];
   initPathPieces(&verticalPath, &horizontalPath, &cornerPath, cornerPieces, pathPieces);
+  int cornerCount = 0;
 
     // Main game loop
     while (!WindowShouldClose())        // Detect window close button or ESC key
@@ -52,9 +53,12 @@ int main(void)
       if (editMode.editState == EXPORT)
       {
         write_paths_to_json(pathPieces, "JSON/paths.json");
+        write_paths_to_json(cornerPieces, "JSON/corners.json");
         writeLevelTojson(level, "JSON/level.json");
 	editMode.editState = NULLSTATE;
       }
+       
+      countCornerPieces(&cornerCount, cornerPieces); 
 
       BeginDrawing();
         ClearBackground(RAYWHITE);
@@ -63,7 +67,7 @@ int main(void)
         BeginMode3D(camera);
           renderLevel(level);
 	  renderPositionPoints(levelPoints);
-          renderPath(pathPieces, cornerPieces);
+          renderPath(pathPieces, cornerPieces, cornerCount);
         EndMode3D();
        
         //render 2D goes here

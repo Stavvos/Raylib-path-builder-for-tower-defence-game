@@ -46,11 +46,9 @@ void upPathInit(struct Path* pathPiece, struct Path verticalPath, struct Point p
 
 void initCornerPathPiece(struct Path* cornerPiece, struct Point points[ROWS][COLS], int i, int j)
 {
-  if(points[i][j].pointState != STARTPOINT)
-  {
-    cornerPiece->centre = points[i][j].pos; 
+    cornerPiece->centre = points[i][j].pos;
+    cornerPiece->pathType = CORNERPATH; 
     cornerPiece->draw = true;
-  }
 }
 
 void searchLevelPoints(int i, int j, struct Point points[ROWS][COLS], struct Path pathPieces[], struct Path horizontalPath, struct Path verticalPath, struct Path cornerPieces[])
@@ -71,32 +69,34 @@ void searchLevelPoints(int i, int j, struct Point points[ROWS][COLS], struct Pat
     pathIndex++;
     searchLevelPoints(i, j - 1, points, pathPieces, horizontalPath, verticalPath, cornerPieces);
   }
-  
   //right 
-  if (j + 1 < COLS && visitedPoints[i][j + 1] == false && points[i][j + 1].direction == RIGHT)
+  else if (j + 1 < COLS && visitedPoints[i][j + 1] == false && points[i][j + 1].direction == RIGHT)
   {
     rightPathInit(&pathPieces[pathIndex], horizontalPath, points, i, j); 
     initCornerPathPiece(&cornerPieces[pathIndex], points, i, j);
     pathIndex++;
     searchLevelPoints(i, j + 1, points, pathPieces, horizontalPath, verticalPath, cornerPieces);
   }
-
   //up
-  if (i - 1 >= 0 && visitedPoints[i - 1][j] == false && points[i - 1][j].direction == UP)
+  else if (i - 1 >= 0 && visitedPoints[i - 1][j] == false && points[i - 1][j].direction == UP)
   {
     upPathInit(&pathPieces[pathIndex], verticalPath, points, i, j);
     initCornerPathPiece(&cornerPieces[pathIndex], points, i, j);
     pathIndex++;
     searchLevelPoints(i - 1, j, points, pathPieces, horizontalPath, verticalPath, cornerPieces);
   }
-  
   //down
-  if (i + 1 < ROWS && visitedPoints[i + 1][j] == false && points[i + 1][j].direction == DOWN)
+  else if (i + 1 < ROWS && visitedPoints[i + 1][j] == false && points[i + 1][j].direction == DOWN)
   {
     downPathInit(&pathPieces[pathIndex], verticalPath, points, i, j);
     initCornerPathPiece(&cornerPieces[pathIndex], points, i, j);
     pathIndex++;
     searchLevelPoints(i + 1, j, points, pathPieces, horizontalPath, verticalPath, cornerPieces);
+  }
+  //capture the final corner piece
+  else 
+  {
+    initCornerPathPiece(&cornerPieces[pathIndex], points, i, j);
   }
 }
 
@@ -156,6 +156,18 @@ void pointStateAllocator(struct Point points[ROWS][COLS], Camera3D camera, struc
           points[i][j].direction = RIGHT;
         }
       }
+    }
+  }
+}
+
+void countCornerPieces(int* cornerCount, struct Path cornerPieces[])
+{
+  *cornerCount = 0;
+  for (int i = 0; i < ROWS*COLS; i++)
+  {
+    if(cornerPieces[i].pathType == CORNERPATH)
+    {
+      (*cornerCount)++;
     }
   }
 }

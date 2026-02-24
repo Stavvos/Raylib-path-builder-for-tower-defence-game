@@ -19,6 +19,7 @@ const char* path_type_to_string(PathType type) {
    case DOWNPATH: return "DOWNPATH";
    case LEFTPATH: return "LEFTPATH";
    case RIGHTPATH: return "RIGHTPATH";
+   case CORNERPATH: return "CORNERPATH";
    case NULLTYPE: return "NULLTYPE";
    default: return "UNKNOWN";
  }

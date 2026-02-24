@@ -24,6 +24,7 @@ typedef enum PathType
   DOWNPATH,
   LEFTPATH,
   RIGHTPATH,
+  CORNERPATH,
   NULLTYPE
 } PathType;
 

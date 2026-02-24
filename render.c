@@ -6,7 +6,7 @@ void renderLevel(struct Level level)
   DrawModelEx(level.model, level.centre, (Vector3){ 0, 1, 0 }, 0.0f, (Vector3){ 1.0f, 1.0f, 1.0f }, GREEN);
 }
 
-void renderPath(struct Path pathPieces[], struct Path cornerPieces[])
+void renderPath(struct Path pathPieces[], struct Path cornerPieces[], int cornerCount)
 {
  for (int i = 0; i < ROWS*COLS; i++)
  {
@@ -21,9 +21,9 @@ void renderPath(struct Path pathPieces[], struct Path cornerPieces[])
     }
   }
 
-  for (int i = 0; i < ROWS*COLS; i++)
+  for (int i = 0; i < cornerCount - 1; i++)
   {
-    if(cornerPieces[i].draw == true)
+    if(cornerPieces[i].draw == true && i > 0)
     {
        DrawModelEx(cornerPieces[i].model,
        cornerPieces[i].centre,

@@ -65,6 +65,8 @@ void initPathPieces(struct Path* verticalPath, struct Path* horizontalPath, stru
   for(int i = 0; i < ROWS*COLS; i++)
   {
     cornerPieces[i] = *cornerPath;
+    cornerPieces[i].pathType = NULLTYPE;
+    cornerPieces[i].draw = false;
   }
 
   for (int i = 0; i < ROWS*COLS; i++)
