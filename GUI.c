@@ -34,13 +34,8 @@ void renderButtons(struct EditMode* editMode)
   {
     editMode->editState = REMOVEPATHPOINT;
   }
-
-  if (GuiButton((Rectangle){ 24, 216, 120, 30 }, "TEST PATH"))
-  {
   
-  }
-  
-  if (GuiButton((Rectangle){ 24, 248, 120, 30 }, "EXPORT"))
+  if (GuiButton((Rectangle){ 24, 216, 120, 30 }, "EXPORT PATH"))
   {
     editMode->editState = EXPORT;	  
   }
