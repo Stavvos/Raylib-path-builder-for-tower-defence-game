@@ -8,6 +8,53 @@
 #include "raymath.h"
 #include "export.c"
 
+void testLinkedList()
+{
+  //linked list practice  
+  Node* head = NULL;
+
+  head = (Node*) malloc(sizeof(Node));
+
+  /*if (head == NULL)
+  {
+    return 1;
+  }*/
+  
+  head->point.pos = (Vector3){0.0f,0.0f,0.0f};
+  head->next = (Node*)malloc(sizeof(Node));
+  head->next->point.pos = (Vector3){1.0f, 0.0f, 0.0f};
+  head->next->next = NULL;
+
+  //print values of the linked list
+  printLinkedList(head);
+  
+  struct Point testPoint;
+  testPoint.pos = (Vector3){2.0f, 0.0f, 0.0f};
+ 
+  //append value to end of the linked list
+  pushEnd(head, testPoint);
+  printLinkedList(head);
+  
+  //append value to the front of the linked list
+  pushFront(&head, testPoint);
+  printLinkedList(head);
+  
+  //remove the first item of the linked list
+  popFront(&head);
+  printLinkedList(head);
+  
+  //remove the last item of the linked list 
+  popBack(head);
+  printLinkedList(head);
+  
+  //remove item in linked list as per a vector3 search
+  removeNodeByVectorValue(&head, testPoint.pos); 
+  printLinkedList(head);
+  
+  // Free allocated memory from linked list
+  deleteLinkedList(&head);
+}
+
 int main(void)
 {
   // Initialization
@@ -41,41 +88,44 @@ int main(void)
   struct Path pathPieces[ROWS*COLS];
   initPathPieces(&verticalPath, &horizontalPath, &cornerPath, cornerPieces, pathPieces);
   int cornerCount = 0;
+  
+  testLinkedList();
 
-    // Main game loop
-    while (!WindowShouldClose())        // Detect window close button or ESC key
+  // Main game loop
+  while (!WindowShouldClose())        // Detect window close button or ESC key
+  {
+    //Update
+    switchCameraMode(&camera, &cam); 
+    pointStateAllocator(levelPoints, camera, &editMode);
+    findStartPoints(levelPoints, pathPieces, horizontalPath, verticalPath, cornerPieces);
+     
+          
+    if (editMode.editState == EXPORT)
     {
-      //Update
-      switchCameraMode(&camera, &cam); 
-      pointStateAllocator(levelPoints, camera, &editMode);
-      findStartPoints(levelPoints, pathPieces, horizontalPath, verticalPath, cornerPieces);
-      
-      if (editMode.editState == EXPORT)
-      {
-        write_paths_to_json(pathPieces, "JSON/paths.json");
-        write_paths_to_json(cornerPieces, "JSON/corners.json");
-        writeLevelTojson(level, "JSON/level.json");
-	editMode.editState = NULLSTATE;
-      }
-       
-      countCornerPieces(&cornerCount, cornerPieces); 
-
-      BeginDrawing();
-        ClearBackground(RAYWHITE);
-        
-        //render 3D goes here
-        BeginMode3D(camera);
-          renderLevel(level);
-	  renderPositionPoints(levelPoints);
-          renderPath(pathPieces, cornerPieces, cornerCount);
-        EndMode3D();
-       
-        //render 2D goes here
-	//GUI
-        renderButtons(&editMode);
-
-      EndDrawing();
+      write_paths_to_json(pathPieces, "JSON/paths.json");
+      write_paths_to_json(cornerPieces, "JSON/corners.json");
+      writeLevelTojson(level, "JSON/level.json");
+      editMode.editState = NULLSTATE;
     }
+       
+    countCornerPieces(&cornerCount, cornerPieces); 
+
+    BeginDrawing();
+      ClearBackground(RAYWHITE);
+        
+      //render 3D goes here
+      BeginMode3D(camera);
+        renderLevel(level);
+        renderPositionPoints(levelPoints);
+        renderPath(pathPieces, cornerPieces, cornerCount);
+      EndMode3D();
+       
+      //render 2D goes here
+      //GUI
+      renderButtons(&editMode);
+
+    EndDrawing();
+  }
   
   //de-initialise
   UnloadModel(level.model);
