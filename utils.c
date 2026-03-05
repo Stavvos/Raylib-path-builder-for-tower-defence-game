@@ -18,9 +18,18 @@ void printLinkedList(Node* head)
   printf("Linked List printed\n\n");
 }
 
-void pushEnd(Node* head, struct Point newPoint)
+void pushEnd(Node** head, struct Point newPoint)
 {
-  Node* current = head;
+  //empty list case
+  if (*head == NULL)
+  {
+    *head = (Node*)malloc(sizeof(Node));
+    (*head)->point = newPoint;
+    (*head)->next = NULL;
+    return;
+  }
+
+  Node* current = *head;
 
   while (current->next != NULL)
   {

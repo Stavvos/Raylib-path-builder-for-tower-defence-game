@@ -8,53 +8,6 @@
 #include "raymath.h"
 #include "export.c"
 
-void testLinkedList()
-{
-  //linked list practice  
-  Node* head = NULL;
-
-  head = (Node*) malloc(sizeof(Node));
-
-  /*if (head == NULL)
-  {
-    return 1;
-  }*/
-  
-  head->point.pos = (Vector3){0.0f,0.0f,0.0f};
-  head->next = (Node*)malloc(sizeof(Node));
-  head->next->point.pos = (Vector3){1.0f, 0.0f, 0.0f};
-  head->next->next = NULL;
-
-  //print values of the linked list
-  printLinkedList(head);
-  
-  struct Point testPoint;
-  testPoint.pos = (Vector3){2.0f, 0.0f, 0.0f};
- 
-  //append value to end of the linked list
-  pushEnd(head, testPoint);
-  printLinkedList(head);
-  
-  //append value to the front of the linked list
-  pushFront(&head, testPoint);
-  printLinkedList(head);
-  
-  //remove the first item of the linked list
-  popFront(&head);
-  printLinkedList(head);
-  
-  //remove the last item of the linked list 
-  popBack(head);
-  printLinkedList(head);
-  
-  //remove item in linked list as per a vector3 search
-  removeNodeByVectorValue(&head, testPoint.pos); 
-  printLinkedList(head);
-  
-  // Free allocated memory from linked list
-  deleteLinkedList(&head);
-}
-
 int main(void)
 {
   // Initialization
@@ -84,23 +37,15 @@ int main(void)
   struct Path pathPiece;
   initPathPiece(&pathPiece);
   
-  //test linked list  
-  testLinkedList();
-
+  //create linked list head
   Node* head = NULL;
-  head = (Node*) malloc(sizeof(Node));
-  
-  if (head == NULL)
-  {
-    return 1;
-  }
 
   // Main game loop
   while (!WindowShouldClose())        // Detect window close button or ESC key
   {
     //Update
     switchCameraMode(&camera, &cam); 
-    pathClickHandler(levelPoints, camera, &editMode, head);
+    pathClickHandler(levelPoints, camera, &editMode, &head);
           
     /*if (editMode.editState == EXPORT)
     {
