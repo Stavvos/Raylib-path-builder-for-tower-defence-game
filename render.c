@@ -1,37 +1,32 @@
 #include "utils.h"
 #include "raylib.h"
+#include <stddef.h>
 
 void renderLevel(struct Level level)
 {
   DrawModelEx(level.model, level.centre, (Vector3){ 0, 1, 0 }, 0.0f, (Vector3){ 1.0f, 1.0f, 1.0f }, GREEN);
 }
 
-void renderPath(struct Path pathPieces[], struct Path cornerPieces[], int cornerCount)
+void renderPath(Node* head, struct Path cubePath)
 {
- for (int i = 0; i < ROWS*COLS; i++)
- {
-    if (pathPieces[i].draw == true)
-    {
-      DrawModelEx(pathPieces[i].model,
-      pathPieces[i].centre,
-      (Vector3){ 0, 1, 0 },
-      0.0f,
-      (Vector3){ 1.0f, 1.0f, 1.0f },
-      BROWN);
-    }
-  }
-
-  for (int i = 0; i < cornerCount - 1; i++)
+  //no head case
+  if (head == NULL)
   {
-    if(cornerPieces[i].draw == true && i > 0)
-    {
-       DrawModelEx(cornerPieces[i].model,
-       cornerPieces[i].centre,
-       (Vector3){ 0, 1, 0 },
-       0.0f,
-       (Vector3){ 1.0f, 1.0f, 1.0f },
-       BROWN);
-    }
+    return;
+  }
+  
+  Node* current = head;
+
+  while(current != NULL)
+  { 
+    DrawModelEx(cubePath.model,
+                current->point.pos,
+                (Vector3){ 0, 1, 0 },
+                0.0f,
+                (Vector3){ 1.0f, 1.0f, 1.0f },
+                BROWN);
+  
+    current = current->next;
   }
 }
 
@@ -41,18 +36,18 @@ void renderPositionPoints(struct Point levelPoints[ROWS][COLS])
   {
     for (int j = 0; j < COLS; j++)
     {
-      if (levelPoints[i][j].direction != NODIRECTION)
+      if (levelPoints[i][j].pointState == POINT)
       {	      
         DrawSphere(levelPoints[i][j].pos, 0.25, BLUE);
       }
-      else if (levelPoints[i][j].pointState == STARTPOINT)
+      else if (levelPoints[i][j].pointState == DOUBLEPOINT)
       {
-        DrawSphere(levelPoints[i][j].pos, 0.25, RED);
-      } 
+        DrawSphere(levelPoints[i][j].pos, 0.25, RED); 
+      }
       else
-      {
+      { 
         DrawSphere(levelPoints[i][j].pos, 0.25, BLACK);
-      } 
+      }
     } 
   }
 }

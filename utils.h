@@ -3,9 +3,9 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#define ROWS 10 
-#define COLS 10 
-#define SPACING 6 
+#define ROWS 20 
+#define COLS 20 
+#define SPACING 3 
 #define POSX -30.0f
 #define POSZ -30.0f
 
@@ -18,16 +18,6 @@ struct Level
   Model model;
 };
 
-typedef enum PathType
-{
-  UPPATH,
-  DOWNPATH,
-  LEFTPATH,
-  RIGHTPATH,
-  CORNERPATH,
-  NULLTYPE
-} PathType;
-
 struct Path
 {
   float width;
@@ -35,13 +25,12 @@ struct Path
   Vector3 centre;
   Mesh mesh;
   Model model;
-  PathType pathType;
-  bool draw;
 };
 
 typedef enum PointState
 {
-  STARTPOINT,
+  POINT,
+  DOUBLEPOINT,
   NOPOINT
 } PointState;
 
@@ -53,24 +42,10 @@ typedef enum CameraState
 
 typedef enum EditState
 {
-  NULLSTATE, 
-  ADDSTARTPOINT,
-  REMOVEPATHPOINT,
-  ADDUPDIRECTION,
-  ADDDOWNDIRECTION,
-  ADDLEFTDIRECTION,
-  ADDRIGHTDIRECTION,
+  NULLSTATE,
+  ADDPOINT, 
   EXPORT
 } EditState;
-
-typedef enum Direction
-{
-  UP,
-  DOWN,
-  LEFT,
-  RIGHT,
-  NODIRECTION
-} Direction;
 
 struct EditMode
 {
@@ -81,7 +56,6 @@ struct Point
 {
   Vector3 pos;
   PointState pointState;
-  Direction direction;
 };
 
 struct Cam

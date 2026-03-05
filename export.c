@@ -12,7 +12,7 @@ cJSON* vector3_to_json(Vector3 v) {
 }
 
 // Function to serialize a PathType to JSON
-const char* path_type_to_string(PathType type) {
+/*const char* path_type_to_string(PathType type) {
  switch (type)
  {
    case UPPATH: return "UPPATH";
@@ -23,7 +23,21 @@ const char* path_type_to_string(PathType type) {
    case NULLTYPE: return "NULLTYPE";
    default: return "UNKNOWN";
  }
+}*/
+
+
+/*
+const char* path_type_to_string(PathType type) {
+ switch (type)
+ {
+   case VERTICALPATH: return "VERTICALPATH";
+   case HORIZONTALPATH: return "HORIZONTALPATH";
+   case NULLTYPE: return "NULLTYPE";
+   default: return "UNKNOWN";
+ }
 }
+
+
 
 // Function to serialize a Path struct to JSON
 cJSON* path_to_json(struct Path path) {
@@ -38,7 +52,9 @@ cJSON* path_to_json(struct Path path) {
 
   return json;
 }
+*/
 
+/*
 // Function to write the array of paths to a JSON file
 void write_paths_to_json(struct Path* paths, const char* filename) {
   cJSON* json_array = cJSON_CreateArray();
@@ -116,4 +132,4 @@ void writeLevelTojson(struct Level level, const char* filename) {
   // Clean up
   cJSON_Delete(jsonArray);
   free(jsonString);
-}
+}  */

@@ -81,34 +81,34 @@ int main(void)
   initLevel(&level);
    
   //initialise path pieces
-  struct Path verticalPath;
-  struct Path horizontalPath;
-  struct Path cornerPath;
-  struct Path cornerPieces[ROWS*COLS];
-  struct Path pathPieces[ROWS*COLS];
-  initPathPieces(&verticalPath, &horizontalPath, &cornerPath, cornerPieces, pathPieces);
-  int cornerCount = 0;
+  struct Path pathPiece;
+  initPathPiece(&pathPiece);
   
+  //test linked list  
   testLinkedList();
+
+  Node* head = NULL;
+  head = (Node*) malloc(sizeof(Node));
+  
+  if (head == NULL)
+  {
+    return 1;
+  }
 
   // Main game loop
   while (!WindowShouldClose())        // Detect window close button or ESC key
   {
     //Update
     switchCameraMode(&camera, &cam); 
-    pointStateAllocator(levelPoints, camera, &editMode);
-    findStartPoints(levelPoints, pathPieces, horizontalPath, verticalPath, cornerPieces);
-     
+    pathClickHandler(levelPoints, camera, &editMode, head);
           
-    if (editMode.editState == EXPORT)
+    /*if (editMode.editState == EXPORT)
     {
       write_paths_to_json(pathPieces, "JSON/paths.json");
       write_paths_to_json(cornerPieces, "JSON/corners.json");
       writeLevelTojson(level, "JSON/level.json");
       editMode.editState = NULLSTATE;
-    }
-       
-    countCornerPieces(&cornerCount, cornerPieces); 
+    }*/
 
     BeginDrawing();
       ClearBackground(RAYWHITE);
@@ -117,7 +117,7 @@ int main(void)
       BeginMode3D(camera);
         renderLevel(level);
         renderPositionPoints(levelPoints);
-        renderPath(pathPieces, cornerPieces, cornerCount);
+        renderPath(head, pathPiece);
       EndMode3D();
        
       //render 2D goes here
@@ -129,9 +129,13 @@ int main(void)
   
   //de-initialise
   UnloadModel(level.model);
-  UnloadModel(verticalPath.model);
-  UnloadModel(horizontalPath.model);
-  UnloadModel(cornerPath.model);
+  UnloadModel(pathPiece.model);
+  
+  if (head != NULL)
+  {
+    deleteLinkedList(&head);
+  } 
+
   //Close window and OpenGL context
   CloseWindow();
 
