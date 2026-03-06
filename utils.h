@@ -43,7 +43,8 @@ typedef enum CameraState
 typedef enum EditState
 {
   NULLSTATE,
-  ADDPOINT, 
+  ADDPOINT,
+  UNDO, 
   EXPORT
 } EditState;
 
@@ -74,7 +75,7 @@ void printLinkedList(Node* head);
 void pushEnd(Node** head, struct Point newPoint);
 void pushFront(Node** head, struct Point newPoint);
 bool popFront(Node** head);
-bool popBack(Node* head);
+bool popBack(Node** head);
 bool removeNodeByVectorValue(Node** head, Vector3 pos);
 void deleteLinkedList(Node** head);
 

@@ -46,7 +46,8 @@ int main(void)
     //Update
     switchCameraMode(&camera, &cam); 
     pathClickHandler(levelPoints, camera, &editMode, &head);
-          
+    undoHandler(&head, &editMode, levelPoints);
+
     /*if (editMode.editState == EXPORT)
     {
       write_paths_to_json(pathPieces, "JSON/paths.json");

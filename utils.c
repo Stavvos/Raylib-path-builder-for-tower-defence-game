@@ -69,23 +69,24 @@ bool popFront(Node** head)
   return true;
 }
 
-bool popBack(Node* head)
+bool popBack(Node** head)
 {
   //no head case 
-  if (head == NULL)
+  if (*head == NULL)
   {
     return false;
   }
 
   //only one item in list case
-  if(head->next == NULL)
+  if((*head)->next == NULL)
   {
-    free(head);
+    free(*head);
+    *head = NULL;
     return true;
   }
 
   //get to second last item in the list  
-  Node* current = head;
+  Node* current = *head;
   while(current->next->next != NULL)
   {
     current = current->next;
