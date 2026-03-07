@@ -25,8 +25,6 @@ void pathClickHandler(struct Point points[ROWS][COLS], Camera3D camera, struct E
       }
     }
   }
-
-  printLinkedList(*head);
 }
 
 

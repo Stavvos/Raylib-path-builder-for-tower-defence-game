@@ -11,71 +11,38 @@ cJSON* vector3_to_json(Vector3 v) {
   return json;
 }
 
-// Function to serialize a PathType to JSON
-/*const char* path_type_to_string(PathType type) {
- switch (type)
- {
-   case UPPATH: return "UPPATH";
-   case DOWNPATH: return "DOWNPATH";
-   case LEFTPATH: return "LEFTPATH";
-   case RIGHTPATH: return "RIGHTPATH";
-   case CORNERPATH: return "CORNERPATH";
-   case NULLTYPE: return "NULLTYPE";
-   default: return "UNKNOWN";
- }
-}*/
-
-
-/*
-const char* path_type_to_string(PathType type) {
- switch (type)
- {
-   case VERTICALPATH: return "VERTICALPATH";
-   case HORIZONTALPATH: return "HORIZONTALPATH";
-   case NULLTYPE: return "NULLTYPE";
-   default: return "UNKNOWN";
- }
-}
-
-
-
-// Function to serialize a Path struct to JSON
-cJSON* path_to_json(struct Path path) {
+// Function to serialize a Point struct to JSON
+cJSON* pathToJson(struct Point point) {
+  
   cJSON* json = cJSON_CreateObject();
-
-  // Add primitive types to the JSON object
-  cJSON_AddNumberToObject(json, "width", path.width);
-  cJSON_AddNumberToObject(json, "height", path.height);
-  cJSON_AddItemToObject(json, "centre", vector3_to_json(path.centre));
-  cJSON_AddStringToObject(json, "pathType", path_type_to_string(path.pathType));
-  cJSON_AddBoolToObject(json, "draw", path.draw);
+  cJSON_AddItemToObject(json, "point", vector3_to_json(point.pos));
 
   return json;
 }
-*/
 
-/*
 // Function to write the array of paths to a JSON file
-void write_paths_to_json(struct Path* paths, const char* filename) {
-  cJSON* json_array = cJSON_CreateArray();
+void writePathToJson(Node* head, const char* fileName) {
+  
+  cJSON* jsonArray = cJSON_CreateArray();
+ 
+  Node* current = head;
 
-  // Iterate over the array and convert each Path to a JSON object
-  int i = 0;
-  while(paths[i].pathType != NULLTYPE)
+  while (current != NULL)
   {
-     cJSON* path_json = path_to_json(paths[i]);
-     cJSON_AddItemToArray(json_array, path_json);
-     i++;
-  }
-  char* json_string = cJSON_Print(json_array);
+    cJSON* pathJson = pathToJson(current->point);
+    cJSON_AddItemToArray(jsonArray, pathJson);
+    current = current->next; 
+  } 
+
+  char* jsonString = cJSON_Print(jsonArray);
 
   // Write the JSON string to a file
-  FILE* file = fopen(filename, "w");
+  FILE* file = fopen(fileName, "w");
   if (file)
   {
-     fprintf(file, "%s", json_string);
+     fprintf(file, "%s", jsonString);
      fclose(file);
-     printf("Data written to %s\n", filename);
+     printf("Data written to %s\n", fileName);
   }
   else
   {
@@ -83,8 +50,8 @@ void write_paths_to_json(struct Path* paths, const char* filename) {
   }
 
   // Clean up
-  cJSON_Delete(json_array);
-  free(json_string);
+  cJSON_Delete(jsonArray);
+  free(jsonString);
 }
 
 // Function to serialize level struct to JSON
@@ -132,4 +99,4 @@ void writeLevelTojson(struct Level level, const char* filename) {
   // Clean up
   cJSON_Delete(jsonArray);
   free(jsonString);
-}  */
+}  

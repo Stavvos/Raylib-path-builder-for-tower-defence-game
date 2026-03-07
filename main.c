@@ -48,13 +48,12 @@ int main(void)
     pathClickHandler(levelPoints, camera, &editMode, &head);
     undoHandler(&head, &editMode, levelPoints);
 
-    /*if (editMode.editState == EXPORT)
+    if (editMode.editState == EXPORT)
     {
-      write_paths_to_json(pathPieces, "JSON/paths.json");
-      write_paths_to_json(cornerPieces, "JSON/corners.json");
+      writePathToJson(head, "JSON/path.json");
       writeLevelTojson(level, "JSON/level.json");
       editMode.editState = NULLSTATE;
-    }*/
+    }
 
     BeginDrawing();
       ClearBackground(RAYWHITE);

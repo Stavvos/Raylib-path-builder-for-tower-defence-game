@@ -12,4 +12,9 @@ void renderButtons(struct EditMode* editMode)
   {
     editMode->editState = UNDO;
   }
+
+  if (GuiButton((Rectangle){ 24, 88, 156, 30 }, "EXPORT PATH"))
+  {
+    editMode->editState = EXPORT;
+  }
 }

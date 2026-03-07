@@ -1,14 +1,14 @@
 [{
-		"width":	54,
-		"height":	54,
+		"width":	57,
+		"height":	57,
 		"centre":	{
-			"x":	-3,
+			"x":	-1.5,
 			"y":	0.5,
-			"z":	-3
+			"z":	-1.5
 		},
-		"ROWS":	10,
-		"COLS":	10,
-		"SPACING":	6,
+		"ROWS":	20,
+		"COLS":	20,
+		"SPACING":	3,
 		"POSX":	-30,
 		"POSZ":	-30
 	}]
